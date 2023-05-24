@@ -9,6 +9,7 @@ import autoprefixer from "autoprefixer";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 var TerserPlugin = require("terser-webpack-plugin");
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
+import CopyPlugin from "copy-webpack-plugin";
 
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 export const analyzeBundle = process.env["ANALYZE_BUNDLE"] === "true";
@@ -104,6 +105,17 @@ if (isDev) {
   );
 }
 if (analyzeBundle) plugins.push(new BundleAnalyzerPlugin());
+plugins.push(
+  new CopyPlugin({
+    patterns: [
+      { from: "webpack/yasgui.png", to: "webpack/" },
+      { from: "packages/yasgui/static/", to: "packages/yasgui/static/" },
+    ],
+    options: {
+      concurrency: 100,
+    },
+  })
+);
 
 export const genericConfig: webpack.Configuration = {
   //We're cannot use all source map implementations because of the terser plugin
