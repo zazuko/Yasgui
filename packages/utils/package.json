@@ -1,5 +1,5 @@
 {
-  "name": "@triply/yasgui-utils",
+  "name": "@zazuko/yasgui-utils",
   "version": "4.2.28",
   "description": "Utils for YASGUI libs",
   "main": "build/index.min.js",
