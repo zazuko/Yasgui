@@ -69,7 +69,7 @@ export class EndpointSelect extends EventEmitter {
     this.options = options;
     this.value = initialValue;
     this.history = history.map((endpoint) => {
-      return { endpoint, type: "history" };
+      return { endpoint: sanitize(endpoint), type: "history" };
     });
     // Add endpoint if not defined
     if (this.options.keys.indexOf("endpoint") <= 0) this.options.keys.push("endpoint");

@@ -102,7 +102,7 @@ export default class Table implements Plugin<PluginConfig> {
   }
 
   private getUriLinkFromBinding(binding: Parser.BindingValue, prefixes?: { [key: string]: string }) {
-    const href = binding.value;
+    const href = sanitize(binding.value);
     let visibleString = href;
     let prefixed = false;
     if (prefixes) {
@@ -116,11 +116,12 @@ export default class Table implements Plugin<PluginConfig> {
     }
     // Hide brackets when prefixed or compact
     const hideBrackets = prefixed || this.persistentConfig.compact;
-    return `${hideBrackets ? "" : "&lt;"}<a class='iri' target='${
+    const uri = `${hideBrackets ? "" : "&lt;"}<a class='iri' target='${
       this.config.openIriInNewWindow ? "_blank" : "_self"
-    }'${this.config.openIriInNewWindow ? " ref='noopener noreferrer'" : ""} href='${href}'>${visibleString}</a>${
-      hideBrackets ? "" : "&gt;"
-    }`;
+    }'${this.config.openIriInNewWindow ? " ref='noopener noreferrer'" : ""} href='${href}'>${sanitize(
+      visibleString
+    )}</a>${hideBrackets ? "" : "&gt;"}`;
+    return sanitize(uri);
   }
   private getCellContent(binding: Parser.BindingValue, prefixes?: { [label: string]: string }): string {
     let content: string;
@@ -133,7 +134,7 @@ export default class Table implements Plugin<PluginConfig> {
     return `<div>${content}</div>`;
   }
   private formatLiteral(literalBinding: Parser.BindingValue, prefixes?: { [key: string]: string }) {
-    let stringRepresentation = escape(literalBinding.value);
+    let stringRepresentation = sanitize(escape(literalBinding.value));
     // Return now when in compact mode.
     if (this.persistentConfig.compact) return stringRepresentation;
 
@@ -168,7 +169,7 @@ export default class Table implements Plugin<PluginConfig> {
           render: (data: Parser.BindingValue | "", type: any, _row: any, _meta: DataTables.CellMetaSettings) => {
             // Handle empty rows
             if (data === "") return data;
-            if (type === "filter" || type === "sort" || !type) return data.value;
+            if (type === "filter" || type === "sort" || !type) return sanitize(data.value);
             return this.getCellContent(data, prefixes);
           },
         };
