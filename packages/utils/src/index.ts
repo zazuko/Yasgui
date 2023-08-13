@@ -1,3 +1,4 @@
+import { sanitize } from "dompurify";
 export { default as Storage } from "./Storage";
 
 export function drawSvgStringAsElement(svgString: string) {
@@ -55,5 +56,6 @@ export function removeClass(el: Element | undefined | null, className: string) {
 
 export function getAsValue<E, A>(valueOrFn: E | ((arg: A) => E), arg: A): E {
   if (typeof valueOrFn === "function") return (valueOrFn as any)(arg);
+  if (typeof valueOrFn === "string") return sanitize(valueOrFn) as any;
   return valueOrFn;
 }
