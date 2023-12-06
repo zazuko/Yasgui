@@ -1,5 +1,5 @@
 import Parser from "./parsers";
-import * as json2csv from "json2csv";
+import * as json2csv from "@json2csv/plainjs";
 import { mapValues } from "lodash-es";
 export default function (result: Parser.SparqlResults) {
   const variables = result.head.vars;
