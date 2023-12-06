@@ -5,12 +5,12 @@
 
 repoDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 repoFile="${repoDir}/../lerna.json"
-repoVersion=$(sed -nE 's/^\s*"version": "(.*?)",?$/\1/p' ${repoFile})
+repoVersion=$(sed -nE 's/^ *\"version\": \"([^\"]+)\",?$/\1/p' ${repoFile})
 
 packagesDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../packages" && pwd )"
 for packageDir in $( ls ${packagesDir} ); do
   packageFile="${packagesDir}/${packageDir}/package.json"
-  packageVersion=$(sed -nE 's/^\s*"version": "(.*?)",?$/\1/p' ${packageFile})
+  packageVersion=$(sed -nE 's/^ *\"version\": \"([^\"]+)\",?$/\1/p' ${packageFile})
 
   # check if the package version is HIGHER than the repo version
   if [[ $packageVersion != $repoVersion &&
