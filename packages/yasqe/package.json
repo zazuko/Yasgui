@@ -31,7 +31,7 @@
     "codemirror": "^5.51.0",
     "lodash-es": "^4.17.15",
     "query-string": "^6.10.1",
-    "superagent": "5.3.1"
+    "superagent": "^8.1.2"
   },
   "peerDependencies": {
     "@zazuko/yasgui": "4.x"
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@types/codemirror": "0.0.100",
     "@types/node": "14.0.23",
-    "@types/superagent": "^4.1.4",
+    "@types/superagent": "^4.1.24",
     "npm-check": "^5.9.0"
   },
   "publishConfig": {
