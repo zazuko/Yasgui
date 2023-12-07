@@ -11,25 +11,25 @@
     "util:buildWebpackConfig": "tsc -p tsconfig-webpack.json",
     "util:validateTs": "tsc -p ./tsconfig-validate.json --noEmit",
     "util:prettify": "prettier --parser typescript --write $(find ./packages/*/src -regex '.*\\.tsx?$') && prettier --parser css --write $(find ./packages/*/src -regex '.*\\.?scss$')",
-    "util:analyzeBundle": "ANALYZE_BUNDLE=true yarn run build",
+    "util:analyzeBundle": "ANALYZE_BUNDLE=true npm run build",
     "util:bundlesize": "bundlesize",
-    "pretest": "[ -z \"$(ls -A ./build 2> /dev/null)\" ] && echo Run \\\"yarn build\\\" before running a test && exit 1 || true",
-    "test:dev": "TEST_ON_DEV_BUILD=1 yarn run test",
-    "test": "yarn run puppeteer-test && yarn run unit-test",
-    "test-live": "TEST_ON_DEV_BUILD=1 yarn run test",
+    "pretest": "[ -z \"$(ls -A ./build 2> /dev/null)\" ] && echo Run \\\"npm run build\\\" before running a test && exit 1 || true",
+    "test:dev": "TEST_ON_DEV_BUILD=1 nmp run test",
+    "test": "nmp run puppeteer-test && nmp run unit-test",
+    "test-live": "TEST_ON_DEV_BUILD=1 nmp run test",
     "unit-test": "tsc -p ./tsconfig-test.json && mocha $(find ./build/test -name '*-test.js') --require source-map-support/register || true",
     "puppeteer-test": "tsc -p ./tsconfig-test.json && mocha --timeout 30000 ./build/test/test/run.js --require source-map-support/register",
-    "lerna:publish": "yarn && yarn build && yarn test && lerna publish --no-private"
+    "lerna:publish": "npm install && npm run build && npm run test && lerna publish --no-private"
   },
   "betterScripts": {
     "dev": {
-      "command": "yarn run util:buildWebpackConfig && webpack-dev-server --host 0.0.0.0 --port 4000 --config ./webpack/config.js",
+      "command": "npm run util:buildWebpackConfig && webpack-dev-server --host 0.0.0.0 --port 4000 --config ./webpack/config.js",
       "env": {
         "NODE_ENV": "development"
       }
     },
     "build": {
-      "command": "rm -rf ./build && yarn run util:buildWebpackConfig && webpack --config ./webpack/config.js && ./webpack/distributeBuildFiles.sh",
+      "command": "rm -rf ./build && npm run util:buildWebpackConfig && webpack --config ./webpack/config.js && ./webpack/distributeBuildFiles.sh",
       "env": {
         "NODE_ENV": "production"
       }
@@ -123,10 +123,9 @@
       "maxSize": "495 kB"
     }
   ],
-  "resolutions": {
+  "overrides": {
     "brotli-size": "4.0.0"
   },
-  "packageManager": "yarn@3.2.2",
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",
     "css-minimizer-webpack-plugin": "^5.0.0"
