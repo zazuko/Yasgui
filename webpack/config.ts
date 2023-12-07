@@ -193,7 +193,7 @@ export const genericConfig: webpack.Configuration = {
           { loader: "css-loader", options: { importLoaders: 2 } },
           {
             loader: "postcss-loader",
-            options: { plugins: [autoprefixer()] },
+            options: { postcssOptions: { plugins: [autoprefixer()] } },
           },
           "sass-loader",
         ],
@@ -216,7 +216,7 @@ export const genericConfig: webpack.Configuration = {
           { loader: "css-loader", options: { importLoaders: 1 } },
           {
             loader: "postcss-loader",
-            options: { plugins: () => [bgImage({ mode: "cutter" })] },
+            options: { postcssOptions: { plugins: () => [bgImage({ mode: "cutter" })] } },
             // options: { }
           },
         ],
