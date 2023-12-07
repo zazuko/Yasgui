@@ -86,7 +86,7 @@
     "lerna": "^8.0.0",
     "lint-staged": "^10.0.8",
     "mini-css-extract-plugin": "^2.7.6",
-    "mocha": "^8.0.1",
+    "mocha": "^10.2.0",
     "node-sass": "8",
     "node-static": "^0.7.11",
     "postcss-bgimage": "2.1.3",
