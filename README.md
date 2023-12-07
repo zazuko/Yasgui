@@ -13,13 +13,13 @@ Below are instructions on how to include Yasgui in your project. If you only wan
 ### npm
 
 ```sh
-npm i @triply/yasgui
+npm i @zazuko/yasgui
 ```
 
 ### Yarn
 
 ```sh
-yarn add @triply/yasgui
+yarn add @zazuko/yasgui
 ```
 
 ## Local development
@@ -38,6 +38,6 @@ Run `yarn run build`. It'll store the transpiled js/css files in the `build` dir
 
 ## License
 
-This software is written by Triply.
+This is a fork from Zazuko from software written by Triply.
 
 This code is released under the MIT license.
