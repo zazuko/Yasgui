@@ -7,8 +7,6 @@
   "scripts": {
     "build": "better-npm-run build",
     "dev": "better-npm-run dev",
-    "link": "lerna link",
-    "postinstall": "yarn run link",
     "util:lint": "ESLINT_STRICT=true eslint --ext .tsx --ext .ts $(ls -d ./packages/*/* | grep -E '(src|test|grammar)$')",
     "util:buildWebpackConfig": "tsc -p tsconfig-webpack.json",
     "util:validateTs": "tsc -p ./tsconfig-validate.json --noEmit",
@@ -84,7 +82,7 @@
     "fs-extra": "^9.0.1",
     "html-webpack-plugin": "^5.5.1",
     "husky": "^4.2.3",
-    "lerna": "^6.0.0",
+    "lerna": "^7.0.0",
     "lint-staged": "^10.0.8",
     "mini-css-extract-plugin": "^2.7.6",
     "mocha": "^8.0.1",
