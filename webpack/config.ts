@@ -22,7 +22,7 @@ const plugins: any[] = [
 const defaultEndpoint = "https://dbpedia.org/sparql";
 const corsProxy = "";
 function getAliasFor(packageName: "yasgui" | "yasr" | "yasqe" | "utils") {
-  const fullPackageName = packageName === "utils" ? "@triply/yasgui-utils" : `@triply/${packageName}`;
+  const fullPackageName = packageName === "utils" ? "@zazuko/yasgui-utils" : `@zazuko/${packageName}`;
   const packagePath = path.resolve(__dirname, "../packages", packageName, "src");
   return {
     [`${fullPackageName}$`]: path.resolve(packagePath, "index.ts"),

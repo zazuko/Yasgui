@@ -1,7 +1,7 @@
 import Autocomplete from "@tarekraafat/autocomplete.js";
 import { EventEmitter } from "events";
 import { pick } from "lodash-es";
-import { addClass } from "@triply/yasgui-utils";
+import { addClass } from "@zazuko/yasgui-utils";
 require("./endpointSelect.scss");
 import parse from "autosuggest-highlight/parse";
 import { sanitize } from "dompurify";

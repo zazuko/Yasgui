@@ -1,9 +1,9 @@
 const JsUri = require("jsuri");
 
 import { default as Tab, PersistedJson } from "./Tab";
-import Yasr from "@triply/yasr";
-import { PlainRequestConfig } from "@triply/yasqe";
-import { getAsValue } from "@triply/yasgui-utils";
+import Yasr from "@zazuko/yasr";
+import { PlainRequestConfig } from "@zazuko/yasqe";
+import { getAsValue } from "@zazuko/yasgui-utils";
 var getUrlParams = function (_url?: string) {
   var urlFromWindow = false;
   if (!_url) {

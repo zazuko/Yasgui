@@ -1,7 +1,7 @@
-import { addClass, drawSvgStringAsElement, removeClass } from "@triply/yasgui-utils";
+import { addClass, drawSvgStringAsElement, removeClass } from "@zazuko/yasgui-utils";
 import "./TabPanel.scss";
 import Tab from "./Tab";
-import { RequestConfig } from "@triply/yasqe";
+import { RequestConfig } from "@zazuko/yasqe";
 import { toPairs, fromPairs } from "lodash-es";
 const AcceptOptionsMap: { key: string; value: string }[] = [
   { key: "JSON", value: "application/sparql-results+json" },

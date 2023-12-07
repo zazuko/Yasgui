@@ -9,7 +9,7 @@ import {
   removeClass,
   addClass,
   hasClass,
-} from "@triply/yasgui-utils";
+} from "@zazuko/yasgui-utils";
 import Parser from "./parsers";
 export { default as Parser } from "./parsers";
 import { addScript, addCss, sanitize } from "./helpers";
