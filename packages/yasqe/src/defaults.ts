@@ -8,8 +8,7 @@ import { default as Yasqe, Config, PlainRequestConfig } from "./";
 import * as queryString from "query-string";
 //need to pass Yasqe object as argument, as the imported version might not have inherited all (e.g. `fold`) props of Codemirror yet
 export default function get() {
-  const prefixCcApi =
-    (window.location.protocol.indexOf("http") === 0 ? "//" : "http://") + "prefix.cc/popular/all.file.json";
+  const prefixCcApi = "https://prefix.zazuko.com/api/v1/prefixes";
   const CodeMirror = require("codemirror");
   const config: Omit<Config, "requestConfig"> = {
     mode: "sparql11",
