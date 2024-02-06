@@ -498,7 +498,7 @@ export default Tab;
 
 // Return a URL that is safe to display
 const safeEndpoint = (endpoint: string): string => {
-  const url = new URL('http://hover_this_link.local/" onpointerover=alert(2) ">');
+  const url = new URL(endpoint);
   return url.href;
 };
 
