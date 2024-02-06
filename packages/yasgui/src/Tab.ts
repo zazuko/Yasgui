@@ -496,6 +496,12 @@ export class Tab extends EventEmitter {
 
 export default Tab;
 
+// Return a URL that is safe to display
+const safeEndpoint = (endpoint: string): string => {
+  const url = new URL('http://hover_this_link.local/" onpointerover=alert(2) ">');
+  return url.href;
+};
+
 function getCorsErrorRenderer(tab: Tab) {
   return async (error: Parser.ErrorSummary): Promise<HTMLElement | undefined> => {
     if (!error.status) {
@@ -505,11 +511,13 @@ function getCorsErrorRenderer(tab: Tab) {
       if (shouldReferToHttp) {
         const errorEl = document.createElement("div");
         const errorSpan = document.createElement("p");
-        errorSpan.innerHTML = `You are trying to query an HTTP endpoint (<a href="${tab.getEndpoint()}" target="_blank" rel="noopener noreferrer">${tab.getEndpoint()}</a>) from an HTTP<strong>S</strong> website (<a href="${
+        errorSpan.innerHTML = `You are trying to query an HTTP endpoint (<a href="${safeEndpoint(
+          tab.getEndpoint()
+        )}" target="_blank" rel="noopener noreferrer">${safeEndpoint(
+          tab.getEndpoint()
+        )}</a>) from an HTTP<strong>S</strong> website (<a href="${safeEndpoint(window.location.href)}">${safeEndpoint(
           window.location.href
-        }">${
-          window.location.href
-        }</a>).<br>This is not allowed in modern browsers, see <a target="_blank" rel="noopener noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy</a>.`;
+        )}</a>).<br>This is not allowed in modern browsers, see <a target="_blank" rel="noopener noreferrer" href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy</a>.`;
         if (tab.yasgui.config.nonSslDomain) {
           const errorLink = document.createElement("p");
           errorLink.innerHTML = `As a workaround, you can use the HTTP version of Yasgui instead: <a href="${tab.getShareableLink(
