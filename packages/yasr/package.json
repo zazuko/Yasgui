@@ -6,7 +6,7 @@
   "types": "build/ts/src/index.d.ts",
   "license": "MIT",
   "author": "Triply <info@triply.cc>",
-  "homepage": "https://github.com/TriplyDB/yasgui",
+  "homepage": "https://github.com/zazuko/Yasgui",
   "engines": {
     "node": ">= 8"
   },
@@ -17,10 +17,11 @@
     "Semantic Web",
     "Linked Data"
   ],
-  "bugs": "https://github.com/TriplyDB/yasgui/issues/",
+  "bugs": "https://github.com/zazuko/Yasgui/issues/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TriplyDB/yasgui.git"
+    "url": "https://github.com/zazuko/Yasgui.git",
+    "directory": "packages/yasr"
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
