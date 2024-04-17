@@ -18,8 +18,7 @@
       "@zazuko/yasgui-utils": ["./packages/utils/src"],
       "@zazuko/yasqe": ["./packages/yasqe/src"],
       "@zazuko/yasr": ["./packages/yasr/src"]
-    },
-    "types": ["datatables.net"]
+    }
   },
   "files": ["./packages/yasgui/typings-custom/main.d.ts"],
   "include": ["./packages/*/src/**/**/*", "./webpack/**/*", "./test/*", "./packages/yasqe/grammar/tokenizer.ts"],
