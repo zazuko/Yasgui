@@ -8,7 +8,8 @@ Useful links:
 
 ## Installation
 
-Below are instructions on how to include Yasgui in your project. If you only want to install Yasr or Yasqe, replace yasgui in the commands below
+Below are instructions on how to include Yasgui in your project.
+If you only want to install Yasr or Yasqe, replace yasgui in the commands below.
 
 ### npm
 

@@ -6,11 +6,12 @@
   "types": "build/ts/src/index.d.ts",
   "license": "MIT",
   "author": "Triply <info@triply.cc>",
-  "homepage": "https://github.com/TriplyDB/yasgui",
-  "bugs": "https://github.com/TriplyDB/yasgui/issues",
+  "homepage": "https://github.com/zazuko/Yasgui",
+  "bugs": "https://github.com/zazuko/Yasgui/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TriplyDB/yasgui.git"
+    "url": "https://github.com/zazuko/Yasgui.git",
+    "directory": "packages/utils"
   },
   "dependencies": {
     "@types/node": "^20.10.3",
