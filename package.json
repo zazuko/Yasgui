@@ -20,7 +20,7 @@
     "test-live": "TEST_ON_DEV_BUILD=1 npm run test",
     "unit-test": "tsc -p ./tsconfig-test.json && mocha $(find ./build/test -name '*-test.js') --require source-map-support/register || true",
     "puppeteer-test": "tsc -p ./tsconfig-test.json && mocha --timeout 30000 ./build/test/test/run.js --require source-map-support/register",
-    "release": "npm install && npm run build && npm run test"
+    "release": "npm install && npm run build && npm run test && changeset publish"
   },
   "betterScripts": {
     "dev": {
@@ -120,6 +120,7 @@
     "brotli-size": "4.0.0"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.1",
     "copy-webpack-plugin": "^11.0.0",
     "css-minimizer-webpack-plugin": "^5.0.0"
   }
