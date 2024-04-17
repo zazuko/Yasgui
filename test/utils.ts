@@ -48,7 +48,7 @@ export async function setup(ctx: Mocha.Context, buildDir: string) {
   await fs.emptyDir("./test/screenshots");
   const browser = await puppeteer.launch({
     args: [process.env["NO_SANDBOX"] ? "--no-sandbox" : ""],
-    headless: "new",
+    headless: true,
   });
   return { server, browser };
 }
