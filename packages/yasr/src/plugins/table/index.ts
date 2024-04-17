@@ -2,7 +2,7 @@
  * Make sure not to include any deps from our main index file. That way, we can easily publish the plugin as standalone build
  */
 require("./index.scss");
-require("datatables.net-dt/css/jquery.dataTables.css");
+require("datatables.net-dt/css/dataTables.dataTables.min.css");
 require("datatables.net");
 //@ts-ignore (jquery _does_ expose a default. In es6, it's the one we should use)
 import $ from "jquery";
@@ -15,13 +15,14 @@ import * as faTableIcon from "@fortawesome/free-solid-svg-icons/faTable";
 import { DeepReadonly } from "ts-essentials";
 import { cloneDeep } from "lodash-es";
 import sanitize from "../../helpers/sanitize";
+import type { Api, ConfigColumns, CellMetaSettings, InternalSettings } from "datatables.net";
 
 const ColumnResizer = require("column-resizer");
 const DEFAULT_PAGE_SIZE = 50;
 
 export interface PluginConfig {
   openIriInNewWindow: boolean;
-  tableConfig: DataTables.Settings;
+  tableConfig: InternalSettings;
 }
 
 export interface PersistentConfig {
@@ -43,7 +44,7 @@ export default class Table implements Plugin<PluginConfig> {
   private yasr: Yasr;
   private tableControls: Element | undefined;
   private tableEl: HTMLTableElement | undefined;
-  private dataTable: DataTables.Api | undefined;
+  private dataTable: Api | undefined;
   private tableFilterField: HTMLInputElement | undefined;
   private tableSizeField: HTMLSelectElement | undefined;
   private tableCompactSwitch: HTMLInputElement | undefined;
@@ -147,7 +148,7 @@ export default class Table implements Plugin<PluginConfig> {
     return stringRepresentation;
   }
 
-  private getColumns(): DataTables.ColumnSettings[] {
+  private getColumns(): ConfigColumns[] {
     if (!this.yasr.results) return [];
     const prefixes = this.yasr.getPrefixes();
 
@@ -163,10 +164,10 @@ export default class Table implements Plugin<PluginConfig> {
           type === "filter" || type === "sort" || !type ? data : `<div class="rowNumber">${data}</div>`,
       }, //prepend with row numbers column
       ...this.yasr.results?.getVariables().map((name) => {
-        return <DataTables.ColumnSettings>{
+        return <ConfigColumns>{
           name,
           title: sanitize(name),
-          render: (data: Parser.BindingValue | "", type: any, _row: any, _meta: DataTables.CellMetaSettings) => {
+          render: (data: Parser.BindingValue | "", type: any, _row: any, _meta: CellMetaSettings) => {
             // Handle empty rows
             if (data === "") return data;
             if (type === "filter" || type === "sort" || !type) return sanitize(data.value);
@@ -202,8 +203,8 @@ export default class Table implements Plugin<PluginConfig> {
     }
     this.yasr.resultsEl.appendChild(this.tableEl);
     // reset some default config properties as they couldn't be initialized beforehand
-    const dtConfig: DataTables.Settings = {
-      ...(cloneDeep(this.config.tableConfig) as unknown as DataTables.Settings),
+    const dtConfig: InternalSettings = {
+      ...(cloneDeep(this.config.tableConfig) as unknown as InternalSettings),
       pageLength: persistentConfig?.pageSize ? persistentConfig.pageSize : DEFAULT_PAGE_SIZE,
       data: rows,
       columns: columns,
