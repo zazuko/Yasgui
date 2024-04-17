@@ -20,7 +20,7 @@
     "test-live": "TEST_ON_DEV_BUILD=1 npm run test",
     "unit-test": "tsc -p ./tsconfig-test.json && mocha $(find ./build/test -name '*-test.js') --require source-map-support/register || true",
     "puppeteer-test": "tsc -p ./tsconfig-test.json && mocha --timeout 30000 ./build/test/test/run.js --require source-map-support/register",
-    "lerna:publish": "npm install && npm run build && npm run test && lerna publish --no-private"
+    "release": "npm install && npm run build && npm run test"
   },
   "betterScripts": {
     "dev": {
@@ -76,7 +76,6 @@
     "fs-extra": "^11.2.0",
     "html-webpack-plugin": "^5.5.4",
     "husky": "^9.0.11",
-    "lerna": "^8.1.2",
     "lint-staged": "^15.2.0",
     "mini-css-extract-plugin": "^2.7.6",
     "mocha": "^10.2.0",
