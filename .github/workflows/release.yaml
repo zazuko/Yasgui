@@ -36,3 +36,25 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add build archive to release
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          # Create an archive for the `build` directory (zip and tar.gz formats)
+          zip -r build.zip build
+          tar -czvf build.tar.gz build
+
+          # Upload the archive to all published packages
+          echo '${{ steps.changesets.outputs.publishedPackages }}' | jq -r '.[]|[.name, .version] | @tsv' |
+          while IFS=$'\t' read -r name version; do
+            archive_name=$(npm pack --workspace "$name" --json | jq -r '.[0].filename')
+            tag="$name@$version"
+
+            # Upload the archive to the release
+            gh release upload $tag build.zip --clobber
+            gh release upload $tag build.tar.gz --clobber
+            gh release upload $tag $archive_name --clobber
+          done
+
+          # Clean up the archive files
+          rm build.zip build.tar.gz *.tgz
