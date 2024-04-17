@@ -22,9 +22,6 @@
     "type": "git",
     "url": "https://github.com/TriplyDB/yasgui.git"
   },
-  "scripts": {
-    "prepublishOnly": "./../../bin/checkPackageVersions.sh"
-  },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@json2csv/plainjs": "^7.0.4",

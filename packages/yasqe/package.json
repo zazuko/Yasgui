@@ -22,9 +22,6 @@
     "type": "git",
     "url": "https://github.com/TriplyDB/yasgui.git"
   },
-  "scripts": {
-    "prepublishOnly": "./../../bin/checkPackageVersions.sh"
-  },
   "dependencies": {
     "@types/lodash-es": "^4.17.3",
     "@zazuko/yasgui-utils": "^4.2.34",

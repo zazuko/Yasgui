@@ -7,9 +7,6 @@
   "license": "MIT",
   "author": "Triply <info@triply.cc>",
   "homepage": "https://github.com/TriplyDB/yasgui",
-  "engines": {
-    "node": ">= 8"
-  },
   "keywords": [
     "JavaScript",
     "SPARQL",
@@ -23,7 +20,7 @@
     "url": "https://github.com/TriplyDB/yasgui.git"
   },
   "scripts": {
-    "prepublishOnly": "./../../bin/checkPackageVersions.sh && cd ../.. && npm run build"
+    "prepublishOnly": "cd ../.. && npm run build"
   },
   "dependencies": {
     "@tarekraafat/autocomplete.js": "^7.2.0",
