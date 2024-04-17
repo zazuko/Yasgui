@@ -31,9 +31,6 @@
     "query-string": "^6.10.1",
     "superagent": "^8.1.2"
   },
-  "peerDependencies": {
-    "@zazuko/yasgui": "4.x"
-  },
   "devDependencies": {
     "@types/codemirror": "0.0.100",
     "@types/node": "^20.10.3",
