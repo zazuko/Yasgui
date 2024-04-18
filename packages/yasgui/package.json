@@ -20,9 +20,6 @@
     "url": "https://github.com/zazuko/Yasgui.git",
     "directory": "packages/yasgui"
   },
-  "scripts": {
-    "prepublishOnly": "cd ../.. && npm run build"
-  },
   "dependencies": {
     "@tarekraafat/autocomplete.js": "^7.2.0",
     "@types/lodash-es": "^4.17.3",
