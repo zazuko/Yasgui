@@ -15,14 +15,14 @@ import * as faTableIcon from "@fortawesome/free-solid-svg-icons/faTable";
 import { DeepReadonly } from "ts-essentials";
 import { cloneDeep } from "lodash-es";
 import sanitize from "../../helpers/sanitize";
-import type { Api, ConfigColumns, CellMetaSettings, InternalSettings } from "datatables.net";
+import type { Api, ConfigColumns, CellMetaSettings, Config } from "datatables.net";
 
 const ColumnResizer = require("column-resizer");
 const DEFAULT_PAGE_SIZE = 50;
 
 export interface PluginConfig {
   openIriInNewWindow: boolean;
-  tableConfig: InternalSettings;
+  tableConfig: Config;
 }
 
 export interface PersistentConfig {
@@ -203,8 +203,8 @@ export default class Table implements Plugin<PluginConfig> {
     }
     this.yasr.resultsEl.appendChild(this.tableEl);
     // reset some default config properties as they couldn't be initialized beforehand
-    const dtConfig: InternalSettings = {
-      ...(cloneDeep(this.config.tableConfig) as unknown as InternalSettings),
+    const dtConfig: Config = {
+      ...(cloneDeep(this.config.tableConfig) as unknown as Config),
       pageLength: persistentConfig?.pageSize ? persistentConfig.pageSize : DEFAULT_PAGE_SIZE,
       data: rows,
       columns: columns,
