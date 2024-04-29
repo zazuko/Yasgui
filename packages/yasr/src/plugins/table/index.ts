@@ -74,7 +74,14 @@ export default class Table implements Plugin<PluginConfig> {
   public static defaults: PluginConfig = {
     openIriInNewWindow: true,
     tableConfig: {
-      dom: "tip", //  tip: Table, Page Information and Pager, change to ipt for showing pagination on top
+      layout: {
+        // @ts-ignore
+        top: null, // @TODO: remove ignore once https://github.com/DataTables/DataTablesSrc/issues/271 is released
+        // @ts-ignore
+        topStart: null, // @TODO: remove ignore once https://github.com/DataTables/DataTablesSrc/issues/271 is released
+        // @ts-ignore
+        topEnd: null, // @TODO: remove ignore once https://github.com/DataTables/DataTablesSrc/issues/271 is released
+      },
       pageLength: DEFAULT_PAGE_SIZE, //default page length
       lengthChange: true, //allow changing page length
       data: [],
