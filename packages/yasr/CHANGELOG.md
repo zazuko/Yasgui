@@ -1,5 +1,15 @@
 # Change Log
 
+## 4.3.1
+
+### Patch Changes
+
+- 8aef253: Upgrade datatables.net to 2.0.5
+- cbf8286: Use the right type for DataTables configuration
+- 6e78f30: This fixes the style of the table by using the new `layout` property from DataTables
+  - @zazuko/yasgui-utils@4.3.1
+  - @zazuko/yasqe@4.3.1
+
 ## 4.3.0
 
 ### Minor Changes
