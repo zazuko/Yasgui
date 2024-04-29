@@ -1,5 +1,16 @@
 # Change Log
 
+## 4.3.1
+
+### Patch Changes
+
+- Updated dependencies [8aef253]
+- Updated dependencies [cbf8286]
+- Updated dependencies [6e78f30]
+  - @zazuko/yasr@4.3.1
+  - @zazuko/yasgui-utils@4.3.1
+  - @zazuko/yasqe@4.3.1
+
 ## 4.3.0
 
 ### Patch Changes
