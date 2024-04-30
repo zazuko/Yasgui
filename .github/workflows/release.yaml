@@ -64,3 +64,5 @@ jobs:
 
           # Clean up the archive files
           rm build.zip build.tar.gz *.tgz
+        env:
+          GH_TOKEN: ${{ github.token }}
