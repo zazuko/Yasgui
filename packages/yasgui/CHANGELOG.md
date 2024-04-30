@@ -1,5 +1,14 @@
 # Change Log
 
+## 4.3.2
+
+### Patch Changes
+
+- 574b86f: Improve the release process
+  - @zazuko/yasgui-utils@4.3.2
+  - @zazuko/yasqe@4.3.2
+  - @zazuko/yasr@4.3.2
+
 ## 4.3.1
 
 ### Patch Changes
