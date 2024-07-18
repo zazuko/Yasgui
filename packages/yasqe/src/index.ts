@@ -16,6 +16,7 @@ import { merge, escape } from "lodash-es";
 
 import getDefaults from "./defaults";
 import CodeMirror from "./CodeMirror";
+import { YasqeAjaxConfig } from "./sparql";
 
 export interface Yasqe {
   on(eventName: "query", handler: (instance: Yasqe, req: superagent.SuperAgentRequest) => void): void;
@@ -35,6 +36,8 @@ export interface Yasqe {
   off(eventName: "error", handler: (instance: Yasqe) => void): void;
   on(eventName: "blur", handler: (instance: Yasqe) => void): void;
   off(eventName: "blur", handler: (instance: Yasqe) => void): void;
+  on(eventName: "queryBefore", handler: (instance: Yasqe, config: YasqeAjaxConfig) => void): void;
+  off(eventName: "queryBefore", handler: (instance: Yasqe, config: YasqeAjaxConfig) => void): void;
   on(eventName: "queryResults", handler: (instance: Yasqe, results: any, duration: number) => void): void;
   off(eventName: "queryResults", handler: (instance: Yasqe, results: any, duration: number) => void): void;
   on(eventName: "autocompletionShown", handler: (instance: Yasqe, widget: any) => void): void;

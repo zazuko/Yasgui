@@ -33,6 +33,8 @@ export interface Tab {
   emit(event: "change", tab: Tab, config: PersistedJson): boolean;
   on(event: "query", listener: (tab: Tab) => void): this;
   emit(event: "query", tab: Tab): boolean;
+  on(event: "queryBefore", listener: (tab: Tab) => void): this;
+  emit(event: "queryBefore", tab: Tab): boolean;
   on(event: "queryAbort", listener: (tab: Tab) => void): this;
   emit(event: "queryAbort", tab: Tab): boolean;
   on(event: "queryResponse", listener: (tab: Tab) => void): this;
@@ -353,6 +355,7 @@ export class Tab extends EventEmitter {
 
     this.yasqe.on("blur", this.handleYasqeBlur);
     this.yasqe.on("query", this.handleYasqeQuery);
+    this.yasqe.on("queryBefore", this.handleYasqeQueryBefore);
     this.yasqe.on("queryAbort", this.handleYasqeQueryAbort);
     this.yasqe.on("resize", this.handleYasqeResize);
 
@@ -369,6 +372,7 @@ export class Tab extends EventEmitter {
     this.yasqe?.off("resize", this.handleYasqeResize);
     this.yasqe?.off("autocompletionShown", this.handleAutocompletionShown);
     this.yasqe?.off("autocompletionClose", this.handleAutocompletionClose);
+    this.yasqe?.off("queryBefore", this.handleYasqeQueryBefore);
     this.yasqe?.off("queryResponse", this.handleQueryResponse);
     this.yasqe?.destroy();
     this.yasqe = undefined;
@@ -387,6 +391,9 @@ export class Tab extends EventEmitter {
   };
   handleYasqeQueryAbort = () => {
     this.emit("queryAbort", this);
+  };
+  handleYasqeQueryBefore = () => {
+    this.emit("queryBefore", this);
   };
   handleYasqeResize = (_yasqe: Yasqe, newSize: string) => {
     this.persistentJson.yasqe.editorHeight = newSize;
