@@ -264,6 +264,7 @@ const config: webpack.Configuration = {
     Yasgui: [path.resolve(__dirname, "./../packages/yasgui/src/index.ts")],
     Yasqe: path.resolve(__dirname, "./../packages/yasqe/src/index.ts"),
     Yasr: path.resolve(__dirname, "./../packages/yasr/src/index.ts"),
+    Utils: path.resolve(__dirname, "./../packages/utils/src/index.ts"),
   },
 };
 
