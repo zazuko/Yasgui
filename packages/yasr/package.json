@@ -45,7 +45,7 @@
     "@types/dompurify": "^2.0.1",
     "@types/jquery": "^3.5.0",
     "@types/n3": "^1.1.5",
-    "@types/node": "^20.10.3",
+    "@types/node": "^22.5.4",
     "@types/papaparse": "^5.3.2",
     "@types/sanitize-html": "^1.20.2",
     "@types/superagent": "^4.1.4",

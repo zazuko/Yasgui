@@ -14,7 +14,7 @@
     "directory": "packages/utils"
   },
   "dependencies": {
-    "@types/node": "^20.10.3",
+    "@types/node": "^22.5.4",
     "dompurify": "^2.0.7",
     "store": "^2.0.12"
   },
