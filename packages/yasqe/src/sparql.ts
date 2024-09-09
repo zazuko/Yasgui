@@ -52,6 +52,7 @@ export function getAjaxConfig(
 export async function executeQuery(yasqe: Yasqe, config?: YasqeAjaxConfig): Promise<any> {
   var req: superagent.SuperAgentRequest;
   try {
+    yasqe.emit("queryBefore", yasqe, config);
     getAjaxConfig(yasqe, config);
     const populatedConfig = getAjaxConfig(yasqe, config);
     if (!populatedConfig) {

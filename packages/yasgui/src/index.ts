@@ -60,6 +60,8 @@ export interface Yasgui {
   emit(event: "tabClose", instance: Yasgui, tab: Tab): boolean;
   on(event: "query", listener: (instance: Yasgui, tab: Tab) => void): this;
   emit(event: "query", instance: Yasgui, tab: Tab): boolean;
+  on(event: "queryBefore", listener: (instance: Yasgui, tab: Tab) => void): this;
+  emit(event: "queryBefore", instance: Yasgui, tab: Tab): boolean;
   on(event: "queryAbort", listener: (instance: Yasgui, tab: Tab) => void): this;
   emit(event: "queryAbort", instance: Yasgui, tab: Tab): boolean;
   on(event: "queryResponse", listener: (instance: Yasgui, tab: Tab) => void): this;
@@ -274,6 +276,7 @@ export class Yasgui extends EventEmitter {
   private _registerTabListeners(tab: Tab) {
     tab.on("change", (tab) => this.emit("tabChange", this, tab));
     tab.on("query", (tab) => this.emit("query", this, tab));
+    tab.on("queryBefore", (tab) => this.emit("queryBefore", this, tab));
     tab.on("queryAbort", (tab) => this.emit("queryAbort", this, tab));
     tab.on("queryResponse", (tab) => this.emit("queryResponse", this, tab));
     tab.on("autocompletionShown", (tab, widget) => this.emit("autocompletionShown", this, tab, widget));
