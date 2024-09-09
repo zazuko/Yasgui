@@ -1,5 +1,16 @@
 # Change Log
 
+## 4.3.3
+
+### Patch Changes
+
+- d918c63: Upgrade some dependencies
+- Updated dependencies [d918c63]
+- Updated dependencies [d918c63]
+- Updated dependencies [d918c63]
+  - @zazuko/yasgui-utils@4.3.3
+  - @zazuko/yasqe@4.3.3
+
 ## 4.3.2
 
 ### Patch Changes

@@ -1,5 +1,18 @@
 # Change Log
 
+## 4.3.3
+
+### Patch Changes
+
+- d918c63: Upgrade some dependencies
+- d918c63: Add a `queryBefore` event on Yasgui and Yasqe (by @vemonet, in #16)
+- Updated dependencies [d918c63]
+- Updated dependencies [d918c63]
+- Updated dependencies [d918c63]
+  - @zazuko/yasgui-utils@4.3.3
+  - @zazuko/yasqe@4.3.3
+  - @zazuko/yasr@4.3.3
+
 ## 4.3.2
 
 ### Patch Changes

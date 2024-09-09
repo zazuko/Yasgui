@@ -1,5 +1,12 @@
 # Change Log
 
+## 4.3.3
+
+### Patch Changes
+
+- d918c63: Fix `@zazuko/yasgui-utils` build (by @vemonet, in #17)
+- d918c63: Upgrade some dependencies
+
 ## 4.3.2
 
 ## 4.3.1
