@@ -1,6 +1,6 @@
 {
   "name": "@zazuko/yasgui-utils",
-  "version": "4.3.2",
+  "version": "4.3.3",
   "description": "Utils for YASGUI libs",
   "main": "build/utils.min.js",
   "types": "build/ts/src/index.d.ts",
