@@ -4,7 +4,6 @@ var tokenTypes: { [id: string]: "prefixed" | "var" } = {
   "string-2": "prefixed",
   atom: "var",
 };
-import * as superagent from "superagent";
 
 var conf: Autocompleter.CompleterConfig = {
   postprocessHints: function (_yasqe, hints) {
@@ -91,14 +90,21 @@ var conf: Autocompleter.CompleterConfig = {
     return true;
   },
   get: function (yasqe) {
-    return superagent.get(yasqe.config.prefixCcApi).then((resp) => {
-      var prefixArray: string[] = [];
-      for (var prefix in resp.body) {
-        var completeString = prefix + ": <" + resp.body[prefix] + ">";
-        prefixArray.push(completeString); // the array we want to store in localstorage
-      }
-      return prefixArray.sort();
-    });
+    return fetch(yasqe.config.prefixCcApi)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch prefixes");
+        }
+        return response.json();
+      })
+      .then((resp) => {
+        const prefixArray: string[] = [];
+        for (const prefix in resp) {
+          const completeString = `${prefix}: <${resp[prefix]}>`;
+          prefixArray.push(completeString); // the array we want to store in local storage
+        }
+        return prefixArray.sort();
+      });
   },
   preProcessToken: function (yasqe, token) {
     var previousToken = yasqe.getPreviousNonWsToken(yasqe.getDoc().getCursor().line, token);

@@ -1,5 +1,4 @@
 import { default as Yasqe, Config, RequestConfig } from "./";
-import * as superagent from "superagent";
 import { merge, isFunction } from "lodash-es";
 import * as queryString from "query-string";
 export type YasqeAjaxConfig = Config["requestConfig"];
@@ -50,46 +49,56 @@ export function getAjaxConfig(
 }
 
 export async function executeQuery(yasqe: Yasqe, config?: YasqeAjaxConfig): Promise<any> {
-  var req: superagent.SuperAgentRequest;
+  const queryStart = Date.now();
   try {
     yasqe.emit("queryBefore", yasqe, config);
-    getAjaxConfig(yasqe, config);
     const populatedConfig = getAjaxConfig(yasqe, config);
     if (!populatedConfig) {
-      //nothing to query
-      return;
+      return; // Nothing to query
     }
-    var queryStart = Date.now();
-
-    if (populatedConfig.reqMethod === "POST") {
-      req = superagent.post(populatedConfig.url).type("form").send(populatedConfig.args);
-    } else {
-      req = superagent.get(populatedConfig.url).query(populatedConfig.args);
-    }
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    req.accept(populatedConfig.accept).set(populatedConfig.headers || {});
-
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    if (populatedConfig.withCredentials) req.withCredentials();
-    yasqe.emit("query", req, populatedConfig);
-    return await req.then(
-      (result) => {
-        yasqe.emit("queryResponse", result, Date.now() - queryStart);
-        yasqe.emit("queryResults", result.body, Date.now() - queryStart);
-        return result.body;
+    const abortController = new AbortController();
+    const fetchOptions: RequestInit = {
+      method: populatedConfig.reqMethod,
+      headers: {
+        Accept: populatedConfig.accept,
+        ...(populatedConfig.headers || {}),
+        "Content-Type": populatedConfig.reqMethod === "POST" ? "application/x-www-form-urlencoded" : "",
       },
-      (e) => {
-        if (e instanceof Error && e.message === "Aborted") {
-          //The query was aborted. We should not do or draw anything
-        } else {
-          yasqe.emit("queryResponse", e, Date.now() - queryStart);
-        }
-        yasqe.emit("error", e);
-        throw e;
+      credentials: populatedConfig.withCredentials ? "include" : "same-origin",
+      signal: abortController.signal,
+    };
+    const searchParams = new URLSearchParams();
+    for (const key in populatedConfig.args) {
+      const value = populatedConfig.args[key];
+      if (Array.isArray(value)) {
+        value.forEach((v) => searchParams.append(key, v));
+      } else {
+        searchParams.append(key, value);
       }
-    );
+    }
+    if (populatedConfig.reqMethod === "POST") {
+      fetchOptions.body = searchParams.toString();
+    } else {
+      populatedConfig.url += `?${searchParams.toString()}`;
+    }
+    const request = new Request(populatedConfig.url, fetchOptions);
+    yasqe.emit("query", request, abortController);
+    const response = await fetch(request);
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result || response.statusText);
+    }
+    yasqe.emit("queryResponse", result, Date.now() - queryStart);
+    yasqe.emit("queryResults", result, Date.now() - queryStart);
+    return result;
   } catch (e) {
-    console.error(e);
+    if (e instanceof Error && e.message === "Aborted") {
+      // The query was aborted. We should not do or draw anything
+    } else {
+      yasqe.emit("queryResponse", e, Date.now() - queryStart);
+    }
+    yasqe.emit("error", e);
+    throw e;
   }
 }
 
