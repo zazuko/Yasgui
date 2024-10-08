@@ -112,7 +112,6 @@ class Parser {
         };
       }
     }
-    console.log("got ErrorSummary", this.errorSummary);
     return this.errorSummary;
   }
   public getContentType() {
