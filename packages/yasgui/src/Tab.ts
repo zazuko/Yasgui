@@ -7,7 +7,6 @@ import { default as Yasr, Parser, Config as YasrConfig, PersistentConfig as Yasr
 import { mapValues, eq, mergeWith, words, deburr, invert } from "lodash-es";
 import * as shareLink from "./linkUtils";
 import EndpointSelect from "./endpointSelect";
-import * as superagent from "superagent";
 require("./tab.scss");
 import { getRandomId, default as Yasgui, YasguiRequestConfig } from "./";
 export interface PersistedJsonYasr extends YasrPersistentConfig {
@@ -195,19 +194,18 @@ export class Tab extends EventEmitter {
 
   private checkEndpointForCors(endpoint: string) {
     if (this.yasgui.config.corsProxy && !(endpoint in Yasgui.corsEnabled)) {
-      superagent
-        .get(endpoint)
-        .query({ query: "ASK {?x ?y ?z}" })
-        .then(
-          () => {
+      fetch(`${endpoint}?${new URLSearchParams({ query: "ASK {?x ?y ?z}" }).toString()}`)
+        .then((response) => {
+          if (response.ok) {
             Yasgui.corsEnabled[endpoint] = true;
-          },
-          (e) => {
-            //When we dont get a response at all (and no status code), that means
-            //the browser blocked this request. Likely a cors error
-            Yasgui.corsEnabled[endpoint] = e.status > 0;
+          } else {
+            throw new Error("Non-OK response");
           }
-        );
+        })
+        .catch((e) => {
+          // If we don't get a response at all, it's likely a CORS error
+          Yasgui.corsEnabled[endpoint] = e instanceof TypeError ? false : true;
+        });
     }
   }
   public setEndpoint(endpoint: string, endpointHistory?: string[]) {

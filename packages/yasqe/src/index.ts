@@ -1,6 +1,5 @@
 require("./scss/yasqe.scss");
 require("./scss/buttons.scss");
-import * as superagent from "superagent";
 import { findFirstPrefixLine } from "./prefixFold";
 import { getPrefixesFromQuery, addPrefixes, removePrefixes, Prefixes } from "./prefixUtils";
 import { getPreviousNonWsToken, getNextNonWsToken, getCompleteToken } from "./tokenUtils";
@@ -19,18 +18,12 @@ import CodeMirror from "./CodeMirror";
 import { YasqeAjaxConfig } from "./sparql";
 
 export interface Yasqe {
-  on(eventName: "query", handler: (instance: Yasqe, req: superagent.SuperAgentRequest) => void): void;
-  off(eventName: "query", handler: (instance: Yasqe, req: superagent.SuperAgentRequest) => void): void;
-  on(eventName: "queryAbort", handler: (instance: Yasqe, req: superagent.SuperAgentRequest) => void): void;
-  off(eventName: "queryAbort", handler: (instance: Yasqe, req: superagent.SuperAgentRequest) => void): void;
-  on(
-    eventName: "queryResponse",
-    handler: (instance: Yasqe, req: superagent.SuperAgentRequest, duration: number) => void
-  ): void;
-  off(
-    eventName: "queryResponse",
-    handler: (instance: Yasqe, req: superagent.SuperAgentRequest, duration: number) => void
-  ): void;
+  on(eventName: "query", handler: (instance: Yasqe, req: Request, abortController: AbortController) => void): void;
+  off(eventName: "query", handler: (instance: Yasqe, req: Request, abortController: AbortController) => void): void;
+  on(eventName: "queryAbort", handler: (instance: Yasqe, req: Request) => void): void;
+  off(eventName: "queryAbort", handler: (instance: Yasqe, req: Request) => void): void;
+  on(eventName: "queryResponse", handler: (instance: Yasqe, req: Request, duration: number) => void): void;
+  off(eventName: "queryResponse", handler: (instance: Yasqe, req: Request, duration: number) => void): void;
   showHint: (conf: HintConfig) => void;
   on(eventName: "error", handler: (instance: Yasqe) => void): void;
   off(eventName: "error", handler: (instance: Yasqe) => void): void;
@@ -55,7 +48,8 @@ export class Yasqe extends CodeMirror {
   private prevQueryValid = false;
   public queryValid = true;
   public lastQueryDuration: number | undefined;
-  private req: superagent.SuperAgentRequest | undefined;
+  private req: Request | undefined;
+  private abortController: AbortController | undefined;
   private queryStatus: "valid" | "error" | undefined;
   private queryBtn: HTMLButtonElement | undefined;
   private resizeWrapper?: HTMLDivElement;
@@ -63,7 +57,6 @@ export class Yasqe extends CodeMirror {
   public storage: YStorage;
   public config: Config;
   public persistentConfig: PersistentConfig | undefined;
-  public superagent = superagent;
   constructor(parent: HTMLElement, conf: PartialConfig = {}) {
     super();
     if (!parent) throw new Error("No parent passed as argument. Dont know where to draw YASQE");
@@ -133,16 +126,17 @@ export class Yasqe extends CodeMirror {
   private handleCursorActivity() {
     this.autocomplete(true);
   }
-  private handleQuery(_yasqe: Yasqe, req: superagent.SuperAgentRequest) {
+  private handleQuery(_yasqe: Yasqe, req: Request, abortController: AbortController) {
     this.req = req;
+    this.abortController = abortController;
     this.updateQueryButton();
   }
-  private handleQueryResponse(_yasqe: Yasqe, _response: superagent.SuperAgentRequest, duration: number) {
+  private handleQueryResponse(_yasqe: Yasqe, _response: Request, duration: number) {
     this.lastQueryDuration = duration;
     this.req = undefined;
     this.updateQueryButton();
   }
-  private handleQueryAbort(_yasqe: Yasqe, _req: superagent.SuperAgentRequest) {
+  private handleQueryAbort(_yasqe: Yasqe, _req: Request) {
     this.req = undefined;
     this.updateQueryButton();
   }
@@ -873,7 +867,7 @@ export class Yasqe extends CodeMirror {
 
   public abortQuery() {
     if (this.req) {
-      this.req.abort();
+      this.abortController?.abort();
       this.emit("queryAbort", this, this.req);
     }
   }

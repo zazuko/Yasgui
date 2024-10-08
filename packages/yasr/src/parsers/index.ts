@@ -1,4 +1,3 @@
-import * as SuperAgent from "superagent";
 import SparqlJsonParser from "./json";
 import TurtleParser, { getTurtleAsStatements } from "./turtleFamily";
 import SparqlXmlParser from "./xml";
@@ -57,25 +56,24 @@ const applyMustacheToLiterals: Parser.PostProcessBinding = (binding: Parser.Bind
   return binding;
 };
 class Parser {
-  private res: SuperAgent.Response | undefined;
+  private res: Response | undefined;
   private summary: Parser.ResponseSummary | undefined;
   private errorSummary: Parser.ErrorSummary | undefined;
-  // Contrary to the typings, statusText is part of responseError
-  private error: Error | (SuperAgent.ResponseError & { response: { statusText: string } }) | undefined;
+  private error: Error | undefined;
   private type: "json" | "xml" | "csv" | "tsv" | "ttl" | undefined;
   private executionTime: number | undefined;
-  constructor(responseOrObject: Parser.ResponseSummary | SuperAgent.Response | Error | any, executionTime?: number) {
+  constructor(responseOrObject: Parser.ResponseSummary | Response | Error | any, executionTime?: number) {
     if (responseOrObject.executionTime) this.executionTime = responseOrObject.executionTime;
     if (executionTime) this.executionTime = executionTime; // Parameter has priority
     if (responseOrObject instanceof Error) {
       this.error = responseOrObject;
     } else if ((<any>responseOrObject).xhr) {
-      this.setResponse(<SuperAgent.Response>responseOrObject);
+      this.setResponse(<Response>responseOrObject);
     } else {
       this.setSummary(<Parser.ResponseSummary>responseOrObject);
     }
   }
-  public setResponse(res: SuperAgent.Response) {
+  public setResponse(res: Response) {
     this.res = res;
   }
   public setSummary(summary: Parser.ResponseSummary | any) {
@@ -100,39 +98,25 @@ class Parser {
     if (!this.errorSummary) {
       if (this.res && this.res.status >= 400) {
         this.errorSummary = {
-          text: this.res.text,
+          text: this.res.statusText,
           status: this.res.status,
-          statusText: this.res.error ? this.res.error.text : undefined,
+          statusText: !this.res.ok ? this.res.statusText : undefined,
         };
       }
       if (this.summary && this.summary.error) {
         this.errorSummary = this.summary.error;
       }
       if (this.error) {
-        if ("response" in this.error && this.error.response !== undefined) {
-          this.errorSummary = {
-            text: this.error.response.text,
-            status: this.error.response.status,
-            statusText: this.error.response.statusText,
-          };
-          if (
-            this.error.response.body &&
-            typeof this.error.response.body === "object" &&
-            "message" in this.error.response.body
-          ) {
-            this.errorSummary.text = this.error.response.body.message;
-          }
-        } else {
-          this.errorSummary = {
-            text: this.error.message,
-          };
-        }
+        this.errorSummary = {
+          text: this.error.message,
+        };
       }
     }
+    console.log("got ErrorSummary", this.errorSummary);
     return this.errorSummary;
   }
   public getContentType() {
-    if (this.res) return this.res.header["content-type"];
+    if (this.res) return this.res.headers.get("content-type") || undefined;
     if (this.summary) return this.summary.contentType;
   }
   private json: false | Parser.SparqlResults | undefined;

@@ -169,7 +169,7 @@ export const genericConfig: webpack.Configuration = {
       },
       {
         test: /\.js$/,
-        include: [/query-string/, /strict-uri-encode/, /superagent/, /n3/, /split-on-first/],
+        include: [/query-string/, /strict-uri-encode/, /n3/, /split-on-first/],
         use: [
           {
             loader: "babel-loader",
