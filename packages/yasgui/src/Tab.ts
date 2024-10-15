@@ -194,16 +194,14 @@ export class Tab extends EventEmitter {
 
   private checkEndpointForCors(endpoint: string) {
     if (this.yasgui.config.corsProxy && !(endpoint in Yasgui.corsEnabled)) {
-      fetch(`${endpoint}?${new URLSearchParams({ query: "ASK {?x ?y ?z}" }).toString()}`)
-        .then((response) => {
-          if (response.ok) {
-            Yasgui.corsEnabled[endpoint] = true;
-          } else {
-            throw new Error("Non-OK response");
-          }
+      const askUrl = new URL(endpoint);
+      askUrl.searchParams.append("query", "ASK {?x ?y ?z}");
+      fetch(askUrl.toString())
+        .then(() => {
+          Yasgui.corsEnabled[endpoint] = true;
         })
         .catch((e) => {
-          // If we don't get a response at all, it's likely a CORS error
+          // CORS error throws `TypeError: NetworkError when attempting to fetch resource.`
           Yasgui.corsEnabled[endpoint] = e instanceof TypeError ? false : true;
         });
     }

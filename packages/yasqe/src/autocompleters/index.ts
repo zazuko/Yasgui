@@ -317,7 +317,7 @@ export const fetchFromLov = (
   // doRequests();
 
   const params = new URLSearchParams();
-  params.append("q", token.autocompletionString || "");
+  if (token.autocompletionString) params.append("q", token.autocompletionString);
   params.append("page_size", "50");
   params.append("type", type);
   const url = `${reqProtocol}lov.linkeddata.es/dataset/lov/api/v2/autocomplete/terms?${params.toString()}`;
