@@ -22,8 +22,8 @@ export interface Yasqe {
   off(eventName: "query", handler: (instance: Yasqe, req: Request, abortController: AbortController) => void): void;
   on(eventName: "queryAbort", handler: (instance: Yasqe, req: Request) => void): void;
   off(eventName: "queryAbort", handler: (instance: Yasqe, req: Request) => void): void;
-  on(eventName: "queryResponse", handler: (instance: Yasqe, resp: Response, duration: number) => void): void;
-  off(eventName: "queryResponse", handler: (instance: Yasqe, resp: Response, duration: number) => void): void;
+  on(eventName: "queryResponse", handler: (instance: Yasqe, response: any, duration: number) => void): void;
+  off(eventName: "queryResponse", handler: (instance: Yasqe, response: any, duration: number) => void): void;
   showHint: (conf: HintConfig) => void;
   on(eventName: "error", handler: (instance: Yasqe) => void): void;
   off(eventName: "error", handler: (instance: Yasqe) => void): void;
@@ -131,7 +131,7 @@ export class Yasqe extends CodeMirror {
     this.abortController = abortController;
     this.updateQueryButton();
   }
-  private handleQueryResponse(_yasqe: Yasqe, _response: Response, duration: number) {
+  private handleQueryResponse(_yasqe: Yasqe, _response: any, duration: number) {
     this.lastQueryDuration = duration;
     this.req = undefined;
     this.updateQueryButton();

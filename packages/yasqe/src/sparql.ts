@@ -88,11 +88,11 @@ export async function executeQuery(yasqe: Yasqe, config?: YasqeAjaxConfig): Prom
     const request = new Request(populatedConfig.url, fetchOptions);
     yasqe.emit("query", request, abortController);
     const response = await fetch(request);
-    yasqe.emit("queryResponse", response, Date.now() - queryStart);
     const result = await response.json();
     if (!response.ok) {
       throw new Error(result || response.statusText);
     }
+    yasqe.emit("queryResponse", result, Date.now() - queryStart);
     yasqe.emit("queryResults", result, Date.now() - queryStart);
     return result;
   } catch (e) {
