@@ -82,22 +82,28 @@ export class Tab extends EventEmitter {
     this.rootEl.setAttribute("role", "tabpanel");
     this.rootEl.setAttribute("aria-labelledby", "tab-" + this.persistentJson.id);
 
-    const wrapper = document.createElement("div");
+    // We group controlbar and Yasqe, so that users can easily .appendChild() to the .editorwrapper div
+    // to add a div that goes alongside the controlbar and editor, while YASR still goes full width
+    // Useful for adding an infos div that goes alongside the editor without needing to rebuild the whole Yasgui class
+    const editorWrapper = document.createElement("div");
+    editorWrapper.className = "editorwrapper";
+    const controlbarAndYasqeDiv = document.createElement("div");
     //controlbar
     this.controlBarEl = document.createElement("div");
     this.controlBarEl.className = "controlbar";
-    wrapper.appendChild(this.controlBarEl);
+    controlbarAndYasqeDiv.appendChild(this.controlBarEl);
 
     //yasqe
     this.yasqeWrapperEl = document.createElement("div");
-    wrapper.appendChild(this.yasqeWrapperEl);
+    controlbarAndYasqeDiv.appendChild(this.yasqeWrapperEl);
+    editorWrapper.appendChild(controlbarAndYasqeDiv);
 
     //yasr
     this.yasrWrapperEl = document.createElement("div");
-    wrapper.appendChild(this.yasrWrapperEl);
 
     this.initTabSettingsMenu();
-    this.rootEl.appendChild(wrapper);
+    this.rootEl.appendChild(editorWrapper);
+    this.rootEl.appendChild(this.yasrWrapperEl);
     this.initControlbar();
     this.initYasqe();
     this.initYasr();
