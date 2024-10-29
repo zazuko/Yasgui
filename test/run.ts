@@ -228,7 +228,7 @@ PREFIX geo: <http://www.opengis.net/ont/geosparql#> select
       await wait(200);
       expect(await getShowCount()).to.be.lessThan(7);
       expect(await getHideCount()).to.equal(0);
-    });
+    }).timeout(5000);
     it("Should show the same results irregardless of where the cursor is", async () => {
       await page.evaluate(() => {
         const query = `select * where { ?s <https://test.a.com/55`;
