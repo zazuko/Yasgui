@@ -1,7 +1,6 @@
 import { default as Yasqe, Token, Hint, Position, Config, HintFn, HintConfig } from "../";
 import Trie from "../trie";
 import { EventEmitter } from "events";
-import * as superagent from "superagent";
 import { take } from "lodash-es";
 const CodeMirror = require("codemirror");
 require("./show-hint.scss");
@@ -316,24 +315,28 @@ export const fetchFromLov = (
   //   .append($("<span>Fetchting autocompletions &nbsp;</span>"))
   //   .append($(yutils.svg.getElement(require("../imgs.js").loader)).addClass("notificationLoader"));
   // doRequests();
-  return superagent
-    .get(reqProtocol + "lov.linkeddata.es/dataset/lov/api/v2/autocomplete/terms")
-    .query({
-      q: token.autocompletionString,
-      page_size: 50,
-      type: type,
-    })
-    .then(
-      (result) => {
-        if (result.body.results) {
-          return result.body.results.map((r: any) => r.uri[0]);
-        }
-        return [];
-      },
-      (_e) => {
-        yasqe.showNotification(notificationKey, "Failed fetching suggestions");
+
+  const params = new URLSearchParams();
+  if (token.autocompletionString) params.append("q", token.autocompletionString);
+  params.append("page_size", "50");
+  params.append("type", type);
+  const url = `${reqProtocol}lov.linkeddata.es/dataset/lov/api/v2/autocomplete/terms?${params.toString()}`;
+  return fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed fetching suggestions from Linked Open Vocabularies");
       }
-    );
+      return response.json();
+    })
+    .then((result) => {
+      if (result.results) {
+        return result.results.map((r: any) => r.uri[0]);
+      }
+      return [];
+    })
+    .catch((_e) => {
+      yasqe.showNotification(notificationKey, "Failed fetching suggestions");
+    });
 };
 
 import variableCompleter from "./variables";
