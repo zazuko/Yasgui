@@ -18,8 +18,8 @@ import CodeMirror from "./CodeMirror";
 import { YasqeAjaxConfig } from "./sparql";
 
 export interface Yasqe {
-  on(eventName: "query", handler: (instance: Yasqe, req: Request, abortController: AbortController) => void): void;
-  off(eventName: "query", handler: (instance: Yasqe, req: Request, abortController: AbortController) => void): void;
+  on(eventName: "query", handler: (instance: Yasqe, req: Request, abortController?: AbortController) => void): void;
+  off(eventName: "query", handler: (instance: Yasqe, req: Request, abortController?: AbortController) => void): void;
   on(eventName: "queryAbort", handler: (instance: Yasqe, req: Request) => void): void;
   off(eventName: "queryAbort", handler: (instance: Yasqe, req: Request) => void): void;
   on(eventName: "queryResponse", handler: (instance: Yasqe, response: any, duration: number) => void): void;
@@ -126,7 +126,7 @@ export class Yasqe extends CodeMirror {
   private handleCursorActivity() {
     this.autocomplete(true);
   }
-  private handleQuery(_yasqe: Yasqe, req: Request, abortController: AbortController) {
+  private handleQuery(_yasqe: Yasqe, req: Request, abortController?: AbortController) {
     this.req = req;
     this.abortController = abortController;
     this.updateQueryButton();
@@ -867,16 +867,19 @@ export class Yasqe extends CodeMirror {
 
   public abortQuery() {
     if (this.req) {
-      this.abortController?.abort();
+      if (this.abortController) {
+        this.abortController.abort();
+      }
       this.emit("queryAbort", this, this.req);
     }
   }
+
   public expandEditor() {
     this.setSize(null, "100%");
   }
 
   public destroy() {
-    //  Abort running query;
+    // Abort running query
     this.abortQuery();
     this.unregisterEventListeners();
     this.resizeWrapper?.removeEventListener("mousedown", this.initDrag, false);
