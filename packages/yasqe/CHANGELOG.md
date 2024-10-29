@@ -1,5 +1,15 @@
 # Change Log
 
+## 4.4.0
+
+### Minor Changes
+
+- 2489238: Replace `superagent` with standard `fetch` (from @vemonet in #19)
+
+### Patch Changes
+
+- @zazuko/yasgui-utils@4.4.0
+
 ## 4.3.3
 
 ### Patch Changes

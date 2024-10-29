@@ -1,5 +1,19 @@
 # Change Log
 
+## 4.4.0
+
+### Minor Changes
+
+- 2489238: Improve `div` groupment in Yasgui to enable better customization of the editor interface (by @vemonet in #20)
+- 2489238: Replace `superagent` with standard `fetch` (from @vemonet in #19)
+
+### Patch Changes
+
+- Updated dependencies [2489238]
+  - @zazuko/yasqe@4.4.0
+  - @zazuko/yasr@4.4.0
+  - @zazuko/yasgui-utils@4.4.0
+
 ## 4.3.3
 
 ### Patch Changes
