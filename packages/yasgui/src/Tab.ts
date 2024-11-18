@@ -508,7 +508,7 @@ export default Tab;
 // Return a URL that is safe to display
 const safeEndpoint = (endpoint: string): string => {
   const url = new URL(endpoint);
-  return url.href;
+  return encodeURI(url.href);
 };
 
 function getCorsErrorRenderer(tab: Tab) {
