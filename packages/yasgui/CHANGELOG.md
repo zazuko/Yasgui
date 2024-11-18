@@ -1,5 +1,15 @@
 # Change Log
 
+## 4.4.1
+
+### Patch Changes
+
+- 7db4686: Fix typing issue that was preventing to run the demo as expected
+- d4a0a87: Use `encodeURI` in CORS error message
+  - @zazuko/yasgui-utils@4.4.1
+  - @zazuko/yasqe@4.4.1
+  - @zazuko/yasr@4.4.1
+
 ## 4.4.0
 
 ### Minor Changes
