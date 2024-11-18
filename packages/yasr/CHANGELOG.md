@@ -1,5 +1,12 @@
 # Change Log
 
+## 4.4.1
+
+### Patch Changes
+
+- @zazuko/yasgui-utils@4.4.1
+- @zazuko/yasqe@4.4.1
+
 ## 4.4.0
 
 ### Minor Changes
