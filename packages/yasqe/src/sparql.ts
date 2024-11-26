@@ -57,16 +57,19 @@ export async function executeQuery(yasqe: Yasqe, config?: YasqeAjaxConfig): Prom
       return; // Nothing to query
     }
     const abortController = new AbortController();
+
     const fetchOptions: RequestInit = {
       method: populatedConfig.reqMethod,
       headers: {
         Accept: populatedConfig.accept,
         ...(populatedConfig.headers || {}),
-        "Content-Type": populatedConfig.reqMethod === "POST" ? "application/x-www-form-urlencoded" : "",
       },
       credentials: populatedConfig.withCredentials ? "include" : "same-origin",
       signal: abortController.signal,
     };
+    if (fetchOptions?.headers && populatedConfig.reqMethod === "POST") {
+      (fetchOptions.headers as Record<string, string>)["Content-Type"] = "application/x-www-form-urlencoded";
+    }
     const searchParams = new URLSearchParams();
     for (const key in populatedConfig.args) {
       const value = populatedConfig.args[key];
