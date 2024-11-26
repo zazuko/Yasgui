@@ -1,5 +1,12 @@
 # Change Log
 
+## 4.4.2
+
+### Patch Changes
+
+- c7ae45e: Fix `Content-Type` header for `fetch` GET request
+  - @zazuko/yasgui-utils@4.4.2
+
 ## 4.4.1
 
 ### Patch Changes
