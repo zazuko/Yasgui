@@ -1,5 +1,13 @@
 # Change Log
 
+## 4.4.3
+
+### Patch Changes
+
+- Updated dependencies [b835764]
+  - @zazuko/yasqe@4.4.3
+  - @zazuko/yasgui-utils@4.4.3
+
 ## 4.4.2
 
 ### Patch Changes
