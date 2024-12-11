@@ -91,7 +91,12 @@ export async function executeQuery(yasqe: Yasqe, config?: YasqeAjaxConfig): Prom
     const request = new Request(populatedConfig.url, fetchOptions);
     yasqe.emit("query", request, abortController);
     const response = await fetch(request);
-    const result = await response.json();
+    let result = await response.text();
+    try {
+      result = JSON.parse(result);
+    } catch (e) {
+      // ignore
+    }
     if (!response.ok) {
       throw new Error(result || response.statusText);
     }
