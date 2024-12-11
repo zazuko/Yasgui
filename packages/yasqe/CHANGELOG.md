@@ -1,5 +1,12 @@
 # Change Log
 
+## 4.4.3
+
+### Patch Changes
+
+- b835764: Fix support for CONSTRUCT queries.
+  - @zazuko/yasgui-utils@4.4.3
+
 ## 4.4.2
 
 ### Patch Changes
