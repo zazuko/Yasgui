@@ -24,7 +24,6 @@
     "directory": "packages/yasqe"
   },
   "dependencies": {
-    "@types/lodash-es": "^4.17.3",
     "@zazuko/yasgui-utils": "^4.4.3",
     "codemirror": "^5.51.0",
     "lodash-es": "^4.17.15",
@@ -32,6 +31,7 @@
   },
   "devDependencies": {
     "@types/codemirror": "0.0.100",
+    "@types/lodash-es": "^4.17.3",
     "@types/node": "^22.5.4"
   },
   "publishConfig": {
