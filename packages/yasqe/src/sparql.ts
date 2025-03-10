@@ -96,14 +96,11 @@ export async function executeQuery(yasqe: Yasqe, config?: YasqeAjaxConfig): Prom
     }
     // Await the body so we can handle it without the need for async everywhere in the Parser
     const queryResponse = {
-      headers: response.headers,
-      status: response.status,
-      statusText: response.statusText,
-      url: response.url,
-      text: await response.text(),
+      content: await response.text(),
+      ...response,
     };
     yasqe.emit("queryResponse", queryResponse, Date.now() - queryStart);
-    yasqe.emit("queryResults", queryResponse.text, Date.now() - queryStart);
+    yasqe.emit("queryResults", queryResponse.content, Date.now() - queryStart);
     return queryResponse;
   } catch (e) {
     if (e instanceof Error && e.message === "Aborted") {

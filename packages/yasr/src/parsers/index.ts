@@ -56,12 +56,8 @@ const applyMustacheToLiterals: Parser.PostProcessBinding = (binding: Parser.Bind
   return binding;
 };
 
-type QueryResponse = {
-  status: number;
-  statusText: string;
-  headers: Headers;
-  url: string;
-  text: string;
+type QueryResponse = Response & {
+  content: string;
 };
 
 /**
@@ -80,7 +76,7 @@ class Parser {
     if (executionTime) this.executionTime = executionTime; // Parameter has priority
     if (responseOrObject instanceof Error) {
       this.error = responseOrObject;
-    } else if ((<any>responseOrObject).text) {
+    } else if ((<any>responseOrObject).content) {
       this.setResponse(<QueryResponse>responseOrObject);
     } else {
       this.setSummary(<Parser.ResponseSummary>responseOrObject);
@@ -143,7 +139,7 @@ class Parser {
   }
   private getData(): any {
     if (this.res) {
-      if (this.res.text) return this.res.text;
+      if (this.res.content) return this.res.content;
     }
     if (this.summary) return this.summary.data;
   }
