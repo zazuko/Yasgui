@@ -4,7 +4,7 @@ import { pick } from "lodash-es";
 import { addClass } from "@zazuko/yasgui-utils";
 require("./endpointSelect.scss");
 import parse from "autosuggest-highlight/parse";
-import { sanitize } from "dompurify";
+import DOMPurify from "dompurify";
 
 //Export this here instead of from our custom-types folder of autocomplete-js
 //as this interface is exported via the yasgui config. The custom typings are
@@ -24,6 +24,8 @@ export interface CatalogueItem {
 export interface RenderedCatalogueItem<T> {
   matches: { [k in keyof T]?: ReturnType<typeof parse> } & { endpoint?: ReturnType<typeof parse> };
 }
+
+const { sanitize } = DOMPurify;
 
 function listElementIsFullyVissible(el: HTMLLIElement) {
   const { top, bottom } = el.getBoundingClientRect();

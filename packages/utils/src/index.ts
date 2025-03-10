@@ -1,5 +1,7 @@
-import { sanitize } from "dompurify";
+import DOMPurify from "dompurify";
 export { default as Storage } from "./Storage";
+
+const { sanitize } = DOMPurify;
 
 export function drawSvgStringAsElement(svgString: string) {
   if (svgString && svgString.trim().indexOf("<svg") == 0) {
