@@ -55,25 +55,38 @@ const applyMustacheToLiterals: Parser.PostProcessBinding = (binding: Parser.Bind
   }
   return binding;
 };
+
+type QueryResponse = {
+  status: number;
+  statusText: string;
+  headers: Headers;
+  url: string;
+  text: string;
+};
+
+/**
+ * A parser class, which is used to parse a response object, and get the results in a structured way
+ */
 class Parser {
-  private res: Response | undefined;
+  private res: QueryResponse | undefined;
   private summary: Parser.ResponseSummary | undefined;
   private errorSummary: Parser.ErrorSummary | undefined;
   private error: Error | undefined;
   private type: "json" | "xml" | "csv" | "tsv" | "ttl" | undefined;
   private executionTime: number | undefined;
-  constructor(responseOrObject: Parser.ResponseSummary | Response | Error | any, executionTime?: number) {
+
+  constructor(responseOrObject: Parser.ResponseSummary | QueryResponse | Error | any, executionTime?: number) {
     if (responseOrObject.executionTime) this.executionTime = responseOrObject.executionTime;
     if (executionTime) this.executionTime = executionTime; // Parameter has priority
     if (responseOrObject instanceof Error) {
       this.error = responseOrObject;
-    } else if ((<any>responseOrObject).xhr) {
-      this.setResponse(<Response>responseOrObject);
+    } else if ((<any>responseOrObject).text) {
+      this.setResponse(<QueryResponse>responseOrObject);
     } else {
       this.setSummary(<Parser.ResponseSummary>responseOrObject);
     }
   }
-  public setResponse(res: Response) {
+  public setResponse(res: QueryResponse) {
     this.res = res;
   }
   public setSummary(summary: Parser.ResponseSummary | any) {
@@ -100,7 +113,7 @@ class Parser {
         this.errorSummary = {
           text: this.res.statusText,
           status: this.res.status,
-          statusText: !this.res.ok ? this.res.statusText : undefined,
+          statusText: this.res.statusText,
         };
       }
       if (this.summary && this.summary.error) {
@@ -130,8 +143,7 @@ class Parser {
   }
   private getData(): any {
     if (this.res) {
-      if (this.res.body) return this.res.body;
-      if (this.res.text) return this.res.text; //probably a construct or something
+      if (this.res.text) return this.res.text;
     }
     if (this.summary) return this.summary.data;
   }
@@ -237,7 +249,7 @@ class Parser {
   }
 
   getOriginalResponse() {
-    return this.res?.body;
+    return this.res?.text;
   }
 
   getType() {
