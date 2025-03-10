@@ -1,5 +1,17 @@
 # Change Log
 
+## 4.5.0
+
+### Minor Changes
+
+- 638c89e: Clear endpoint select autocomplete on click
+
+### Patch Changes
+
+- @zazuko/yasgui-utils@4.5.0
+- @zazuko/yasqe@4.5.0
+- @zazuko/yasr@4.5.0
+
 ## 4.4.3
 
 ### Patch Changes
