@@ -149,6 +149,9 @@ export default class Table implements Plugin<PluginConfig> {
     if (literalBinding["xml:lang"]) {
       stringRepresentation = `"${stringRepresentation}"<sup>@${literalBinding["xml:lang"]}</sup>`;
     } else if (literalBinding.datatype) {
+      if (literalBinding.datatype === "http://www.w3.org/1999/02/22-rdf-syntax-ns#HTML") {
+        return sanitize(literalBinding.value);
+      }
       const dataType = this.getUriLinkFromBinding({ type: "uri", value: literalBinding.datatype }, prefixes);
       stringRepresentation = `"${stringRepresentation}"<sup>^^${dataType}</sup>`;
     }
@@ -328,6 +331,8 @@ export default class Table implements Plugin<PluginConfig> {
     const switchComponent = document.createElement("label");
     const textComponent = document.createElement("span");
     textComponent.innerText = "Simple view";
+    toggleWrapper.title =
+      "Simple view hides the row numbers and presents the results as they are, without additional styling. Disabling it will render cells with datatype rdf:HTML.";
     addClass(textComponent, "label");
     switchComponent.appendChild(textComponent);
     addClass(switchComponent, "switch");
@@ -344,6 +349,7 @@ export default class Table implements Plugin<PluginConfig> {
     const ellipseSwitchComponent = document.createElement("label");
     const ellipseTextComponent = document.createElement("span");
     ellipseTextComponent.innerText = "Ellipse";
+    ellipseToggleWrapper.title = "Shorten long text content in the table cells";
     addClass(ellipseTextComponent, "label");
     ellipseSwitchComponent.appendChild(ellipseTextComponent);
     addClass(ellipseSwitchComponent, "switch");
