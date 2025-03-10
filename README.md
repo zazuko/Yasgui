@@ -25,17 +25,35 @@ yarn add @zazuko/yasgui
 
 ## Local development
 
-#### Installing dependencies
+### Install dependencies
 
-Run `npm install`.
+```sh
+npm install
+```
 
-#### Running Yasgui locally
+### Run Yasgui locally
 
-To develop locally, run `npm run dev`
+To develop locally, run:
 
-#### Compiling Yasgui
+```sh
+npm run dev
+```
 
-Run `npm run build`. It'll store the transpiled js/css files in the `build` directory.
+### Compiling Yasgui
+
+It'll store the transpiled js/css files in the `build` directory. Run:
+
+```sh
+npm run build
+```
+
+### Run tests
+
+You'll first need to compile it, then run:
+
+```sh
+npm test
+```
 
 ## License
 
