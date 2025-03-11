@@ -94,7 +94,7 @@ export async function executeQuery(yasqe: Yasqe, config?: YasqeAjaxConfig): Prom
     if (!response.ok) {
       throw new Error((await response.text()) || response.statusText);
     }
-    // Await the body so we can handle it without the need for async everywhere in the Parser
+    // Await the response content
     const queryResponse = {
       content: await response.text(),
       ...response,
