@@ -4,7 +4,6 @@ import * as webpack from "webpack";
 import * as path from "path";
 const isProd = process.env.NODE_ENV === "production";
 const isDev = !isProd;
-const bgImage = require("postcss-bgimage");
 import autoprefixer from "autoprefixer";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 var TerserPlugin = require("terser-webpack-plugin");
@@ -216,7 +215,6 @@ export const genericConfig: webpack.Configuration = {
           { loader: "css-loader", options: { importLoaders: 1 } },
           {
             loader: "postcss-loader",
-            options: { postcssOptions: { plugins: () => [bgImage({ mode: "cutter" })] } },
             // options: { }
           },
         ],
