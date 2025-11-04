@@ -15,7 +15,6 @@ var getUrlParams = function (_url?: string) {
     //firefox does some decoding if we're using window.location.hash (e.g. the + sign in contentType settings)
     //Don't want this. So simply get the hash string ourselves
     url.query(url.anchor());
-    if (urlFromWindow) window.location.hash = ""; //clear hash
   }
   return url;
 };
