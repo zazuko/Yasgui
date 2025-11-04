@@ -86,9 +86,19 @@ export class EndpointSelect extends EventEmitter {
     // Create field
     this.inputField = document.createElement("input");
     addClass(this.inputField, "autocomplete");
-    // Clear the query string when clicking on the input field
-    this.inputField.addEventListener("focusin", () => (this.inputField.value = ""));
+    this.inputField.value = this.value;
     autocompleteWrapper.appendChild(this.inputField);
+
+    // Create clear button
+    const clearBtn = document.createElement("button");
+    clearBtn.title = "Clear endpoint";
+    addClass(clearBtn, "clearEndpointBtn");
+    clearBtn.innerText = "✖";
+    clearBtn.addEventListener("click", () => {
+      this.inputField.value = "";
+      this.inputField.focus();
+    });
+    this.container.appendChild(clearBtn);
 
     // Init autocomplete library
     new Autocomplete<CatalogueItem>({
