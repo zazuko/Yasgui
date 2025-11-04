@@ -1,5 +1,20 @@
 # Change Log
 
+## 4.6.0
+
+### Minor Changes
+
+- f6cb66e: This adds a clear button for the endpoint field.
+
+### Patch Changes
+
+- 2e04999: Upgrade various dependencies
+- Updated dependencies [2e04999]
+- Updated dependencies [0cd6b8e]
+  - @zazuko/yasqe@4.6.0
+  - @zazuko/yasgui-utils@4.6.0
+  - @zazuko/yasr@4.6.0
+
 ## 4.5.0
 
 ### Minor Changes

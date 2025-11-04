@@ -1,5 +1,13 @@
 # Change Log
 
+## 4.6.0
+
+### Patch Changes
+
+- 2e04999: Upgrade various dependencies
+- Updated dependencies [2e04999]
+  - @zazuko/yasgui-utils@4.6.0
+
 ## 4.5.0
 
 ### Patch Changes
