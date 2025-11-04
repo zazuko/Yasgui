@@ -77,7 +77,7 @@ export async function getPage(browser: Browser, path: string) {
   return page;
 }
 export function makeScreenshot(page: Page, name?: string) {
-  return page.screenshot({ type: "png", path: "./test/screenshots/" + (name || +Date.now()) + ".png" });
+  return page.screenshot({ type: "png", path: `./test/screenshots/${name ?? Date.now()}.png` });
 }
 export async function closePage(suite: Mocha.Suite, page: Page) {
   const state = suite.ctx.currentTest?.state || "unknown";
