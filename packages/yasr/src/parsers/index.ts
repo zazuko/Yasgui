@@ -31,10 +31,7 @@ namespace Parser {
       bindings: Binding[];
     };
   }
-
-  /**
-   * JSON response summary, that can be stored in localstorage
-   */
+  //a json response summary, that we can store in localstorage
   export interface ResponseSummary {
     data?: any;
     error?: ErrorSummary;
@@ -58,50 +55,25 @@ const applyMustacheToLiterals: Parser.PostProcessBinding = (binding: Parser.Bind
   }
   return binding;
 };
-
-/**
- * Response object from a fetch request with an additional `.content` property containing the awaited response content
- */
-type QueryResponse = Response & {
-  content: string;
-};
-
-/**
- * Parser class for handling query responses from various formats.
- *
- * This class processes responses from SPARQL endpoints and converts them into standardized formats for further processing.
- * It can handle JSON, XML, CSV, TSV, and Turtle responses, detecting the format either from content-type headers
- * or by attempting to parse the content.
- *
- * The parser can process:
- * - Direct QueryResponse objects (regular fetch response with additional content property with the awaited response content)
- * - ResponseSummary objects
- * - Error objects
- * - Raw response data
- *
- * It provides methods to access parsed data in standardized formats, error information,
- * and utilities to convert the data for storage or export.
- */
 class Parser {
-  private res: QueryResponse | undefined;
+  private res: Response | undefined;
   private summary: Parser.ResponseSummary | undefined;
   private errorSummary: Parser.ErrorSummary | undefined;
   private error: Error | undefined;
   private type: "json" | "xml" | "csv" | "tsv" | "ttl" | undefined;
   private executionTime: number | undefined;
-
-  constructor(responseOrObject: Parser.ResponseSummary | QueryResponse | Error | any, executionTime?: number) {
+  constructor(responseOrObject: Parser.ResponseSummary | Response | Error | any, executionTime?: number) {
     if (responseOrObject.executionTime) this.executionTime = responseOrObject.executionTime;
     if (executionTime) this.executionTime = executionTime; // Parameter has priority
     if (responseOrObject instanceof Error) {
       this.error = responseOrObject;
-    } else if ((<any>responseOrObject).content) {
-      this.setResponse(<QueryResponse>responseOrObject);
+    } else if ((<any>responseOrObject).xhr) {
+      this.setResponse(<Response>responseOrObject);
     } else {
       this.setSummary(<Parser.ResponseSummary>responseOrObject);
     }
   }
-  public setResponse(res: QueryResponse) {
+  public setResponse(res: Response) {
     this.res = res;
   }
   public setSummary(summary: Parser.ResponseSummary | any) {
@@ -156,14 +128,12 @@ class Parser {
     if (!this.json) this.json = false; //explicitly set to false, so we don't try to parse this thing again..
     return this.json;
   }
-
-  /**
-   * Get the content of the response
-   */
   private getData(): any {
-    if (this.res?.content) return this.res.content;
-    if (this.summary?.data) return this.summary.data;
-    if (this.res?.body) return this.res.body;
+    if (this.res) {
+      if (this.res.body) return this.res.body;
+      if (this.res.text) return this.res.text; //probably a construct or something
+    }
+    if (this.summary) return this.summary.data;
   }
   public getResponseTime() {
     return this.executionTime;
@@ -215,10 +185,6 @@ class Parser {
     }
     return false;
   }
-
-  /**
-   * Try to parse the response content as JSON or XML if the content type is not set or not recognized
-   */
   private doLuckyGuess(): boolean {
     const data = cloneDeep(this.getData());
     try {
@@ -270,6 +236,10 @@ class Parser {
     return data;
   }
 
+  getOriginalResponse() {
+    return this.res?.body;
+  }
+
   getType() {
     if (!this.type) this.getAsJson(); //detects type as well
     return this.type;
@@ -279,13 +249,9 @@ class Parser {
     if (this.summary) return this.summary.status;
   }
 
-  /**
-   * Get the response summary object for storage in localstorage
-   *
-   * Process the input parameters in such a way that we can store it in local storage (i.e., no function)
-   * and, make sure we can easily pass it on back to this wrapper function when loading it again from storage
-   * When an object is too large to store, this method returns undefined
-   */
+  //process the input parameters in such a way that we can store it in local storage (i.e., no function)
+  //and, make sure we can easily pass it on back to this wrapper function when loading it again from storage
+  //When an object is too large to store, this method returns undefined
   public getAsStoreObject(maxResponseSize: number): Parser.ResponseSummary | undefined {
     let summary = this.summary;
     if (!summary && this.res) {
