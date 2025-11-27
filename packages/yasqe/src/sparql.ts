@@ -94,18 +94,17 @@ export async function executeQuery(yasqe: Yasqe, config?: YasqeAjaxConfig): Prom
     const request = new Request(populatedConfig.url, fetchOptions);
     yasqe.emit("query", request, abortController);
     const response = await fetch(request);
-    let result = await response.text();
-    try {
-      result = JSON.parse(result);
-    } catch (e) {
-      // ignore
-    }
     if (!response.ok) {
-      throw new Error(result || response.statusText);
+      throw new Error((await response.text()) || response.statusText);
     }
-    yasqe.emit("queryResponse", result, Date.now() - queryStart);
-    yasqe.emit("queryResults", result, Date.now() - queryStart);
-    return result;
+    // Await the response content
+    const queryResponse = {
+      content: await response.text(),
+      ...response,
+    };
+    yasqe.emit("queryResponse", queryResponse, Date.now() - queryStart);
+    yasqe.emit("queryResults", queryResponse.content, Date.now() - queryStart);
+    return queryResponse;
   } catch (e) {
     if (e instanceof Error && e.message === "Aborted") {
       // The query was aborted. We should not do or draw anything
