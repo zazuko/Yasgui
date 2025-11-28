@@ -19,12 +19,12 @@ function getRequestConfigSettings(yasqe: Yasqe, conf?: Partial<Config["requestCo
 // type callback = AjaxConfig.callbacks['complete'];
 export function getAjaxConfig(
   yasqe: Yasqe,
-  _config: Partial<Config["requestConfig"]> = {}
+  _config: Partial<Config["requestConfig"]> = {},
 ): PopulatedAjaxConfig | undefined {
   const config: RequestConfig<Yasqe> = merge(
     {},
     getRequestConfigSettings(yasqe, yasqe.config.requestConfig),
-    getRequestConfigSettings(yasqe, _config)
+    getRequestConfigSettings(yasqe, _config),
   );
   if (!config.endpoint || config.endpoint.length == 0) return; // nothing to query!
 
@@ -94,18 +94,21 @@ export async function executeQuery(yasqe: Yasqe, config?: YasqeAjaxConfig): Prom
     const request = new Request(populatedConfig.url, fetchOptions);
     yasqe.emit("query", request, abortController);
     const response = await fetch(request);
-    let result = await response.text();
-    try {
-      result = JSON.parse(result);
-    } catch (e) {
-      // ignore
-    }
     if (!response.ok) {
-      throw new Error(result || response.statusText);
+      throw new Error((await response.text()) || response.statusText);
     }
-    yasqe.emit("queryResponse", result, Date.now() - queryStart);
-    yasqe.emit("queryResults", result, Date.now() - queryStart);
-    return result;
+    // Await the response content and merge with the `Response` object
+    const queryResponse = {
+      ok: response.ok,
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers,
+      type: response.type,
+      content: await response.text(),
+    };
+    yasqe.emit("queryResponse", queryResponse, Date.now() - queryStart);
+    yasqe.emit("queryResults", queryResponse.content, Date.now() - queryStart);
+    return queryResponse;
   } catch (e) {
     if (e instanceof Error && e.message === "Aborted") {
       // The query was aborted. We should not do or draw anything
@@ -153,7 +156,7 @@ export function getUrlArguments(yasqe: Yasqe, _config: Config["requestConfig"]):
       args.reduce((argsObject: { [key: string]: string[] }, arg) => {
         argsObject[arg.name] ? argsObject[arg.name].push(arg.value) : (argsObject[arg.name] = [arg.value]);
         return argsObject;
-      }, {})
+      }, {}),
     );
 
   return data;

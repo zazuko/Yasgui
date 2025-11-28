@@ -55,25 +55,50 @@ const applyMustacheToLiterals: Parser.PostProcessBinding = (binding: Parser.Bind
   }
   return binding;
 };
+
+/**
+ * Response object from a fetch request with an additional `.content` property containing the awaited response content
+ */
+type QueryResponse = Response & {
+  content: string;
+};
+
+/**
+ * Parser class for handling query responses from various formats.
+ *
+ * This class processes responses from SPARQL endpoints and converts them into standardized formats for further processing.
+ * It can handle JSON, XML, CSV, TSV, and Turtle responses, detecting the format either from content-type headers
+ * or by attempting to parse the content.
+ *
+ * The parser can process:
+ * - Direct `QueryResponse` objects (regular fetch response with additional content property with the awaited response content)
+ * - ResponseSummary objects
+ * - Error objects
+ * - Raw response data
+ *
+ * It provides methods to access parsed data in standardized formats, error information,
+ * and utilities to convert the data for storage or export.
+ */
 class Parser {
-  private res: Response | undefined;
+  private res: QueryResponse | undefined;
   private summary: Parser.ResponseSummary | undefined;
   private errorSummary: Parser.ErrorSummary | undefined;
   private error: Error | undefined;
   private type: "json" | "xml" | "csv" | "tsv" | "ttl" | undefined;
   private executionTime: number | undefined;
-  constructor(responseOrObject: Parser.ResponseSummary | Response | Error | any, executionTime?: number) {
+
+  constructor(responseOrObject: Parser.ResponseSummary | QueryResponse | Error | any, executionTime?: number) {
     if (responseOrObject.executionTime) this.executionTime = responseOrObject.executionTime;
     if (executionTime) this.executionTime = executionTime; // Parameter has priority
     if (responseOrObject instanceof Error) {
       this.error = responseOrObject;
-    } else if ((<any>responseOrObject).xhr) {
-      this.setResponse(<Response>responseOrObject);
+    } else if ((<any>responseOrObject).content) {
+      this.setResponse(<QueryResponse>responseOrObject);
     } else {
       this.setSummary(<Parser.ResponseSummary>responseOrObject);
     }
   }
-  public setResponse(res: Response) {
+  public setResponse(res: QueryResponse) {
     this.res = res;
   }
   public setSummary(summary: Parser.ResponseSummary | any) {
@@ -130,6 +155,7 @@ class Parser {
   }
   private getData(): any {
     if (this.res) {
+      if (this.res.content) return this.res.content;
       if (this.res.body) return this.res.body;
       if (this.res.text) return this.res.text; //probably a construct or something
     }
@@ -234,10 +260,6 @@ class Parser {
       return JSON.stringify(data, undefined, 2);
     }
     return data;
-  }
-
-  getOriginalResponse() {
-    return this.res?.body;
   }
 
   getType() {
