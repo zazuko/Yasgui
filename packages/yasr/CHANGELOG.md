@@ -1,5 +1,14 @@
 # Change Log
 
+## 4.6.1
+
+### Patch Changes
+
+- 2285bff: Fix the display of results of DESCRIBE and CONSTRUCT queries.
+- Updated dependencies [2285bff]
+  - @zazuko/yasqe@4.6.1
+  - @zazuko/yasgui-utils@4.6.1
+
 ## 4.6.0
 
 ### Patch Changes
